@@ -7,8 +7,9 @@ import java.util.List;
 @Entity
 public class Person {
     @Id
+    @Column(name = "person_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int person_id;
+    private int id;
     private String firstName;
     private String LastName;
     private String email;
@@ -23,12 +24,13 @@ public class Person {
     public Person(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         LastName = lastName;
+        //TODO add constraint cant have same email as someone else??
         this.email = email;
         this.password = password;
     }
 
-    public int getPerson_id() {
-        return person_id;
+    public int getId() {
+        return id;
     }
 
     public String getFirstName() {
@@ -51,8 +53,8 @@ public class Person {
         return registrations;
     }
 
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
+    public void setId(int person_id) {
+        this.id = person_id;
     }
 
     public void setFirstName(String firstName) {
@@ -74,4 +76,5 @@ public class Person {
     public boolean addRegistration(Registration registration) {
         return true;
     }
+
 }

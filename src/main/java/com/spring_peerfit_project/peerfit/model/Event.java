@@ -2,19 +2,23 @@ package com.spring_peerfit_project.peerfit.model;
 
 import jakarta.persistence.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 public class Event {
     @Id
+    @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int event_id;
+    private int id;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    @Transient
+    private long duration;
     private int numOfPlayers;
     private float price;
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "group_id")
     private GroupChat group;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
@@ -32,8 +36,8 @@ public class Event {
         this.group = group;
     }
 
-    public int getEvent_id() {
-        return event_id;
+    public int getId() {
+        return id;
     }
 
     public LocalDateTime getStartDate() {
@@ -60,8 +64,8 @@ public class Event {
         return registrations;
     }
 
-    public void setEvent_id(int event_id) {
-        this.event_id = event_id;
+    public void setId(int event_id) {
+        this.id = event_id;
     }
 
     public void setStartDate(LocalDateTime startDate) {
@@ -86,5 +90,14 @@ public class Event {
 
     public boolean addRegistration(Registration registration) {
         return true;
+    }
+
+    public long getDuration() {
+        duration = Duration.between(startDate, endDate).toMinutes();
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 }

@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 @Entity
 public class GroupChat {
     @Id
+    @Column(name = "group_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int group_id;
+    private int id;
     private String groupName;
     @OneToOne(mappedBy = "group", cascade = CascadeType.ALL)
     private Event event;
@@ -18,12 +19,12 @@ public class GroupChat {
         this.groupName = groupName;
     }
 
-    public int getGroup_id() {
-        return group_id;
+    public int getId() {
+        return id;
     }
 
-    public void setGroup_id(int group_id) {
-        this.group_id = group_id;
+    public void setId(int group_id) {
+        this.id = group_id;
     }
 
     public String getGroupName() {
