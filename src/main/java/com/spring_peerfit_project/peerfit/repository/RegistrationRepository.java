@@ -11,12 +11,12 @@ import java.util.List;
 @Repository
 public interface RegistrationRepository extends CrudRepository<Registration, Integer> {
 
-    public void findRegistrationById(int id);
+    public Registration findRegistrationById(int id);
 
     //method to return all registrations for a person
-    public List<Registration> findRegistrationsByPerson(Person person);
+    List<Registration> findRegistrationsByPerson(Person person);
 
-    public List<Registration> findRegistrationsByEvent(Event event);
+    List<Registration> findRegistrationsByEvent(Event event);
 
     //method to return registrations given person id
 

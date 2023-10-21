@@ -2,9 +2,8 @@ package com.spring_peerfit_project.peerfit.model;
 
 import jakarta.persistence.*;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.sql.Date;
+import java.sql.Time;
 
 @Entity
 public class Event {
@@ -12,25 +11,30 @@ public class Event {
     @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    @Transient
+    private Date startDate;
+    private Time startTime;
     private long duration;
+    private String address;
     private int numOfPlayers;
+    private Level level;
+    private Atmosphere atm;
+    private Sport sport;
     private float price;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "group_id")
+    private boolean paymentByCard;
+
+    @OneToOne
     private GroupChat group;
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<Registration> registrations;
+//    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+//    private List<Registration> registrations;
 
     protected Event () {
 
     }
 
-    public Event(LocalDateTime startDate, LocalDateTime endDate, int numOfPlayers, float price, GroupChat group) {
+    public Event(Date startDate, Time startTime, int duration, int numOfPlayers, float price, GroupChat group) {
         this.startDate = startDate;
-        this.endDate = endDate;
+        this.startTime = startTime;
+        this.duration = duration;
         this.numOfPlayers = numOfPlayers;
         this.price = price;
         this.group = group;
@@ -40,12 +44,8 @@ public class Event {
         return id;
     }
 
-    public LocalDateTime getStartDate() {
+    public Date getStartDate() {
         return startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
     }
 
     public int getNumOfPlayers() {
@@ -60,20 +60,16 @@ public class Event {
         return group;
     }
 
-    public List<Registration> getRegistrations() {
-        return registrations;
-    }
+//    public List<Registration> getRegistrations() {
+//        return registrations;
+//    }
 
     public void setId(int event_id) {
         this.id = event_id;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
     }
 
     public void setNumOfPlayers(int numOfPlayers) {
@@ -88,16 +84,63 @@ public class Event {
         this.group = group;
     }
 
-    public boolean addRegistration(Registration registration) {
-        return true;
-    }
+    //public boolean addRegistration(Registration registration) {
+//        return true;
+//    }
 
     public long getDuration() {
-        duration = Duration.between(startDate, endDate).toMinutes();
         return duration;
     }
 
     public void setDuration(long duration) {
         this.duration = duration;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
+    public Atmosphere getAtm() {
+        return atm;
+    }
+
+    public void setAtm(Atmosphere atm) {
+        this.atm = atm;
+    }
+
+    public Sport getSport() {
+        return sport;
+    }
+
+    public void setSport(Sport sport) {
+        this.sport = sport;
+    }
+
+    public boolean isPaymentByCard() {
+        return paymentByCard;
+    }
+
+    public void setPaymentByCard(boolean paymentByCard) {
+        this.paymentByCard = paymentByCard;
     }
 }

@@ -2,8 +2,6 @@ package com.spring_peerfit_project.peerfit.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 public class Person {
     @Id
@@ -11,11 +9,13 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String firstName;
-    private String LastName;
+    private String lastName;
     private String email;
     private String password;
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-    private List<Registration> registrations;
+    private int averageRating;
+
+//    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+//    private List<Registration> registrations;
 
     protected Person () {
 
@@ -23,11 +23,15 @@ public class Person {
 
     public Person(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
-        LastName = lastName;
-        //TODO add constraint cant have same email as someone else??
+        this.lastName = lastName;
+        //TODO add constraint cant have same email as someone else??, use setEmail, or in service method
         this.email = email;
         this.password = password;
     }
+
+//    public Person(String email) {
+//        this.email = email;
+//    }
 
     public int getId() {
         return id;
@@ -38,7 +42,7 @@ public class Person {
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public String getEmail() {
@@ -49,9 +53,9 @@ public class Person {
         return password;
     }
 
-    public List<Registration> getRegistrations() {
-        return registrations;
-    }
+//    public List<Registration> getRegistrations() {
+//        return registrations;
+//    }
 
     public void setId(int person_id) {
         this.id = person_id;
@@ -62,7 +66,7 @@ public class Person {
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public void setEmail(String email) {
@@ -77,4 +81,11 @@ public class Person {
         return true;
     }
 
+    public void setAverageRating(int averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public int getAverageRating() {
+        return averageRating;
+    }
 }
