@@ -12,7 +12,7 @@ public class Person {
     private String lastName;
     private String email;
     private String password;
-    private int averageRating;
+    private float averageRating; //default should be 0
 
 //    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
 //    private List<Registration> registrations;
@@ -27,6 +27,7 @@ public class Person {
         //TODO add constraint cant have same email as someone else??, use setEmail, or in service method
         this.email = email;
         this.password = password;
+        this.averageRating = 0.0f;
     }
 
 //    public Person(String email) {
@@ -85,7 +86,7 @@ public class Person {
         this.averageRating = averageRating;
     }
 
-    public int getAverageRating() {
+    public float getAverageRating() {
         return averageRating;
     }
 }
