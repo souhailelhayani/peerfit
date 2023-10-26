@@ -74,21 +74,21 @@ public class PersonService {
 
     //from stackoverflow https://stackoverflow.com/questions/8238586/email-validation-in-java
     //TODO test if it works
-    public static boolean isValid(String email)
+    private boolean isValid(String email)
     {
         Pattern emailPattern = Pattern.compile("[a-zA-Z0-9[!#$%&'()*+,/\\-_\\.\"]]+@[a-zA-Z0-9[!#$%&'()*+,/\\-_\"]]+\\.[a-zA-Z0-9[!#$%&'()*+,/\\-_\"\\.]]+");
         Matcher m = emailPattern.matcher(email);
         return !m.matches();
     }
 
-    private static boolean containsDigit(String pass) {
+    private boolean containsDigit(String pass) {
         for(char c: pass.toCharArray()) {
             if(Character.isDigit(c)) return true;
         }
         return false;
     }
 
-    private static boolean containsLetter(String pass) {
+    private boolean containsLetter(String pass) {
         for(char c: pass.toCharArray()) {
             if(Character.isAlphabetic(c)) return true;
         }

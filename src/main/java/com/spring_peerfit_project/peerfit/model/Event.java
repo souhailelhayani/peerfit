@@ -13,6 +13,9 @@ public class Event {
     private int id;
     private Date startDate;
     private Time startTime;
+    /**
+     * duration in minutes
+     */
     private long duration;
     private String address;
     private int numOfPlayers;
