@@ -35,6 +35,14 @@ public class Registration {
         this.event = event;
     }
 
+    public Registration(Person person, boolean isOrganizer, boolean paymentByCard, Status status, Event event) {
+        this.person = person;
+        this.isOrganizer = isOrganizer;
+        this.paymentByCard = paymentByCard;
+        this.status = status;
+        this.event = event;
+    }
+
     public int getId() {
         return id;
     }

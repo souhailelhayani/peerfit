@@ -26,7 +26,7 @@ public class PersonRepositoryTest {
     @Test
     public void CreateAndReadPerson() {
         Person person = new Person("souhail", "elhayani", "email", "pass");
-        repo.save(person);
+        person = repo.save(person);
 
         Person test = repo.findPersonById(person.getId());
 

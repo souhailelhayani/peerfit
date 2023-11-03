@@ -1,9 +1,6 @@
 package com.spring_peerfit_project.peerfit.repository;
 
-import com.spring_peerfit_project.peerfit.model.Atmosphere;
-import com.spring_peerfit_project.peerfit.model.Event;
-import com.spring_peerfit_project.peerfit.model.Registration;
-import com.spring_peerfit_project.peerfit.model.Sport;
+import com.spring_peerfit_project.peerfit.model.*;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,5 +20,9 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
     List<Event> findEventsBySport(Sport sport);
 
     List<Event> findEventsByAtm(Atmosphere atm);
+
+    List<Event> findEventsByLevel(Level level);
+
     //method to return the organizer of the event
+    List<Event> findAll();
 }

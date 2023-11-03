@@ -2,12 +2,10 @@ package com.spring_peerfit_project.peerfit.Service;
 
 import com.spring_peerfit_project.peerfit.model.*;
 import com.spring_peerfit_project.peerfit.repository.EventRepository;
-import com.spring_peerfit_project.peerfit.repository.RegistrationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,20 +15,20 @@ public class EventService {
     private EventRepository eventRepo;
 
     @Autowired
-    private RegistrationRepository regRepo;
+    private PersonEventRelationService personEventRelationService;
 
     @Transactional
-    public void createEvent(Event event) {
-        Event tmp = eventRepo.findEventById(event.getId());
-        if(tmp != null) {
-            throw new IllegalArgumentException("event with id already exists");
+    public Event createEvent(Event event) {
+        //check event is valid
+        if(!isValid(event)) {
+            throw new IllegalArgumentException("invalid numbers");
         }
-
-        eventRepo.save(event);
+        event = eventRepo.save(event);
+        return event;
     }
 
     @Transactional
-    public Iterable<Event> getAllEvents() {
+    public List<Event> getAllEvents() {
         return eventRepo.findAll();
     }
 
@@ -46,54 +44,50 @@ public class EventService {
     @Transactional
     public List<Event> getEventsByPerson(Person person) {
         if (person == null ) {
-            throw new IllegalArgumentException("Person cannot be null!");
+            throw new IllegalArgumentException("Person cannot be null");
         }
 
-        List<Event> eventsAttendedByPerson = new ArrayList<>();
-        for (Registration r : regRepo.findRegistrationsByPerson(person)) {
-            eventsAttendedByPerson.add(r.getEvent());
-        }
-        return eventsAttendedByPerson;
+        //person passed from personRequestDto should have an id (maybe from path variable ?)
+        return personEventRelationService.getEventsFromPerson(person);
     }
 
     @Transactional
     public List<Event> getEventsByPriceLessThan(float price) {
-        List<Event> list = eventRepo.findEventsByPriceLessThan(price);
-        if(list == null || list.isEmpty()) {
-            throw new IllegalArgumentException("no events with specified price condition");
-        }
-
-        return list;
+        return eventRepo.findEventsByPriceLessThan(price);
     }
 
     @Transactional
     public List<Event> getEventsByPriceBetween(float price, float price2) {
-        List<Event> list = eventRepo.findEventsByPriceBetween(price, price2);
-        if(list == null || list.isEmpty()) {
-            throw new IllegalArgumentException("no events with specified price condition");
-        }
-
-        return list;
+        return eventRepo.findEventsByPriceBetween(price, price2);
     }
 
     @Transactional
     public List<Event> getEventsBySport(Sport sport) {
-        List<Event> list = eventRepo.findEventsBySport(sport);
-        if(list == null || list.isEmpty()) {
-            throw new IllegalArgumentException("no events with specified price condition");
-        }
-
-        return list;
+        return eventRepo.findEventsBySport(sport);
     }
 
     @Transactional
     public List<Event> getEventsByAtm(Atmosphere atmosphere) {
-        List<Event> list = eventRepo.findEventsByAtm(atmosphere);
-        if(list == null || list.isEmpty()) {
-            throw new IllegalArgumentException("no events with specified price condition");
-        }
+        return eventRepo.findEventsByAtm(atmosphere);
+    }
 
-        return list;
+    @Transactional
+    public List<Event> getEventsByLevel(Level lvl) {
+        return eventRepo.findEventsByLevel(lvl);
+    }
+
+    @Transactional
+    public void delete(Event event) {
+        //get all registrations and delete them all
+        List<Registration> list = personEventRelationService.getRegistrationsByEvent(event);
+        for(Registration registration: list) {
+            personEventRelationService.deleteRegistration(registration);
+        }
+        eventRepo.delete(event);
+    }
+
+    private static boolean isValid(Event event) {
+        return !(event.getPrice() < 0 || event.getNumOfPlayers() <= 0 || event.getDuration() <= 0 || event.getAddress().isBlank());
     }
 
 }

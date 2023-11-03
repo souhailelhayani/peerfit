@@ -16,7 +16,7 @@ public class Event {
     /**
      * duration in minutes
      */
-    private long duration;
+    private int duration;
     private String address;
     private int numOfPlayers;
     private Level level;
@@ -34,6 +34,7 @@ public class Event {
 
     }
 
+    //temporarily used for simplified testing
     public Event(Date startDate, Time startTime, int duration, int numOfPlayers, float price, GroupChat group) {
         this.startDate = startDate;
         this.startTime = startTime;
@@ -41,6 +42,20 @@ public class Event {
         this.numOfPlayers = numOfPlayers;
         this.price = price;
         this.group = group;
+    }
+
+    //used in Dto object
+    public Event(Date startDate, Time startTime, int duration, String address, int numOfPlayers, Level level, Atmosphere atm, Sport sport, float price, boolean paymentByCard) {
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.address = address;
+        this.numOfPlayers = numOfPlayers;
+        this.level = level;
+        this.atm = atm;
+        this.sport = sport;
+        this.price = price;
+        this.paymentByCard = paymentByCard;
     }
 
     public int getId() {
@@ -95,7 +110,7 @@ public class Event {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 

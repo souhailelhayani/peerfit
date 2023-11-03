@@ -2,6 +2,8 @@ package com.spring_peerfit_project.peerfit.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+
 @Entity
 public class Person {
     @Id
@@ -13,24 +15,32 @@ public class Person {
     private String email;
     private String password;
     private float averageRating; //default should be 0
+    private int numberOfRatings;
 
 //    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
 //    private List<Registration> registrations;
 
     protected Person () {
-
     }
 
     public Person(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        //TODO add constraint cant have same email as someone else??, use setEmail, or in service method
         this.email = email;
         this.password = password;
         this.averageRating = 0.0f;
     }
 
-//    public Person(String email) {
+    public Person(String firstName, String lastName, String email, String password, float averageRating, int numberOfRatings) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.averageRating = averageRating;
+        this.numberOfRatings = numberOfRatings;
+    }
+
+    //    public Person(String email) {
 //        this.email = email;
 //    }
 
@@ -82,11 +92,19 @@ public class Person {
         return true;
     }
 
-    public void setAverageRating(int averageRating) {
+    public void setAverageRating(float averageRating) {
         this.averageRating = averageRating;
     }
 
     public float getAverageRating() {
         return averageRating;
+    }
+
+    public int getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(int numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
     }
 }

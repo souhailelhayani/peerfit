@@ -3,8 +3,6 @@ package com.spring_peerfit_project.peerfit.Service;
 import com.spring_peerfit_project.peerfit.model.Event;
 import com.spring_peerfit_project.peerfit.model.Person;
 import com.spring_peerfit_project.peerfit.model.Registration;
-import com.spring_peerfit_project.peerfit.repository.EventRepository;
-import com.spring_peerfit_project.peerfit.repository.PersonRepository;
 import com.spring_peerfit_project.peerfit.repository.RegistrationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,84 +17,22 @@ public class RegistrationService {
     @Autowired
     private RegistrationRepository regRepo;
 
-    @Autowired
-    private PersonRepository personRepo;
-
-    @Autowired
-    private EventRepository eventRepo;
-
     @Transactional
-    public void createRegistration(Event event, Person person) {
-        String error = "";
-        if(event == null || person == null) {
-            error += "person or event can't be null";
-        }
+    public void createRegistration(Registration registration, boolean isOrganizer) {
+        //event and person are already verified, in controller use getPerson by id and getEvent by id
+        Event event = registration.getEvent();
+        Person person = registration.getPerson();
 
-        if(person != null && event != null) {
-            if(personRepo.findPersonById(person.getId()) == null) {
-                error += "person doesnt exist";
-            } else if(eventRepo.findEventById(event.getId()) == null) {
-                error += "event doesnt exist";
-            } else if(isPersonInEvent(person, event)) {
-                error += "person already registered in event";
-            }
-        }
-
-        if(!error.isEmpty()) {
-            throw new IllegalArgumentException(error);
-        }
-
-        Registration registration = new Registration(person, event);
+        registration = new Registration(person, isOrganizer, event);
         regRepo.save(registration);
     }
 
-    //TODO test this, maybe it should not be transactional
     @Transactional
     public boolean isPersonInEvent(Person person, Event event) {
         for(Registration registration: regRepo.findRegistrationsByEvent(event)) {
             if(registration.getPerson().getId() == person.getId()) return true;
         }
         return false;
-    }
-
-    @Transactional
-    public void makeOrganizer(Person person, Event event) {
-        String error = "";
-
-        if(event == null || person == null) {
-            error += "person or event can't be null";
-        }
-
-        if(event != null && person != null) {
-            if(eventRepo.findEventById(event.getId()) == null) {
-                error += "event doesnt exist";
-            } else if(personRepo.findPersonById(person.getId()) == null) {
-                error += "person doesnt exist";
-            }
-        }
-
-        if(!error.isEmpty()) {
-            throw new IllegalArgumentException(error);
-        }
-
-        Registration reg = null;
-        for(Registration registration: regRepo.findRegistrationsByPerson(person)) {
-            if(registration.getEvent().getId() == event.getId()) {
-                reg = registration;
-                break;
-            }
-        }
-
-        if(reg == null) {
-            error += "person not registered in event";
-        }
-
-        if(!error.isEmpty()) {
-            throw new IllegalArgumentException(error);
-        }
-
-        reg.setOrganizer(true);
-        regRepo.save(reg);
     }
 
     @Transactional
@@ -115,49 +51,23 @@ public class RegistrationService {
 
     @Transactional
     public List<Registration> getRegistrationsByPerson(Person person) {
-        if(person == null ) {
-            throw new IllegalArgumentException("Person cannot be null!");
-        }
-
-        if(personRepo.findPersonById(person.getId()) == null) {
-            throw new IllegalArgumentException("Person doesnt exist");
-        }
-
-        return regRepo.findRegistrationsByPerson(person);
+        return regRepo.findRegistrationsByPerson_Id(person.getId());
     }
 
     @Transactional
     public List<Registration> getRegistrationsByEvent(Event event) {
-        String error = "";
+        return regRepo.findRegistrationsByEvent_Id(event.getId());
+    }
 
-        if(event == null) {
-            error += "event cant be null";
-        } else if(eventRepo.findEventById(event.getId()) == null) {
-            error += "event doesnt exist";
-        }
-
-        if(!error.isEmpty()) {
-            throw new IllegalArgumentException(error);
-        }
-
-        return regRepo.findRegistrationsByEvent(event);
+    //event and person are already valid
+    @Transactional
+    public Registration getRegistrationByPersonAndEvent(Person person, Event event) {
+        return regRepo.findRegistrationByPerson_IdAndEvent_Id(person.getId(), event.getId());
     }
 
     @Transactional
     public List<Registration> getRegistrationsPersonIsOrganizer(Person person) {
-        String error = "";
-
-        if(person == null) {
-            error += "person cant be null";
-        } else if(personRepo.findPersonById(person.getId()) == null) {
-            error += "person doesnt exist";
-        }
-
-        if(!error.isEmpty()) {
-            throw new IllegalArgumentException(error);
-        }
-
-        List<Registration> list = regRepo.findRegistrationsByPerson(person);
+        List<Registration> list = regRepo.findRegistrationsByPerson_Id(person.getId());
         List<Registration> regList = new ArrayList<>();
 
         for(Registration registration: list) {
