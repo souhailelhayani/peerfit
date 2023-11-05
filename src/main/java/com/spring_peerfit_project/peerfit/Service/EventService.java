@@ -2,10 +2,12 @@ package com.spring_peerfit_project.peerfit.Service;
 
 import com.spring_peerfit_project.peerfit.model.*;
 import com.spring_peerfit_project.peerfit.repository.EventRepository;
+import com.spring_peerfit_project.peerfit.repository.RegistrationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,6 +15,9 @@ public class EventService {
 
     @Autowired
     private EventRepository eventRepo;
+
+    @Autowired
+    private RegistrationRepository registrationRepository;
 
     @Autowired
     private PersonEventRelationService personEventRelationService;
@@ -41,15 +46,15 @@ public class EventService {
         return event;
     }
 
-    @Transactional
-    public List<Event> getEventsByPerson(Person person) {
-        if (person == null ) {
-            throw new IllegalArgumentException("Person cannot be null");
-        }
-
-        //person passed from personRequestDto should have an id (maybe from path variable ?)
-        return personEventRelationService.getEventsFromPerson(person);
-    }
+//    @Transactional
+//    public List<Event> getEventsByPerson(Person person) {
+//        if (person == null ) {
+//            throw new IllegalArgumentException("Person cannot be null");
+//        }
+//
+//        //person passed from personRequestDto should have an id (maybe from path variable ?)
+//        return personEventRelationService.getEventsFromPerson(person);
+//    }
 
     @Transactional
     public List<Event> getEventsByPriceLessThan(float price) {
@@ -74,6 +79,23 @@ public class EventService {
     @Transactional
     public List<Event> getEventsByLevel(Level lvl) {
         return eventRepo.findEventsByLevel(lvl);
+    }
+
+    @Transactional
+    public List<Registration> getAllRegistrations(int id) {
+        return registrationRepository.findRegistrationsByEvent_Id(id);
+    }
+
+    @Transactional
+    public List<Registration> getAllPendingRegistrations(int id) {
+        List<Registration> list = registrationRepository.findRegistrationsByEvent_Id(id);
+        List<Registration> out = new ArrayList<>();
+        for(Registration registration: list) {
+            if(registration.getStatus() == Status.Requested) {
+                out.add(registration);
+            }
+        }
+        return out;
     }
 
     @Transactional

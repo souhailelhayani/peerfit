@@ -1,6 +1,7 @@
 package com.spring_peerfit_project.peerfit.TransferObjects;
 
 import com.spring_peerfit_project.peerfit.model.Atmosphere;
+import com.spring_peerfit_project.peerfit.model.Event;
 import com.spring_peerfit_project.peerfit.model.Level;
 import com.spring_peerfit_project.peerfit.model.Sport;
 
@@ -24,17 +25,17 @@ public class EventResponseDto {
     private float price;
     private boolean paymentByCard;
 
-    public EventResponseDto(int id, Date startDate, Time startTime, int duration, String address, int numOfPlayers, Level level, Atmosphere atm, Sport sport, float price, boolean paymentByCard) {
-        this.id = id;
-        this.startDate = startDate;
-        this.startTime = startTime;
-        this.duration = duration;
-        this.address = address;
-        this.numOfPlayers = numOfPlayers;
-        this.level = level.name();
-        this.atm = atm.name();
-        this.sport = sport.name();
-        this.price = price;
-        this.paymentByCard = paymentByCard;
+    public EventResponseDto(Event event) {
+        this.id = event.getId();
+        this.startDate = event.getStartDate();
+        this.startTime = event.getStartTime();
+        this.duration = event.getDuration();
+        this.address = event.getAddress();
+        this.numOfPlayers = event.getNumOfPlayers();
+        this.level = event.getLevel().name();
+        this.atm = event.getAtm().name();
+        this.sport = event.getSport().name();
+        this.price = event.getPrice();
+        this.paymentByCard = event.isPaymentByCard();
     }
 }

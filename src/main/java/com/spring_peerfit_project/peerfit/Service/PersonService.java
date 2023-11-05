@@ -4,6 +4,7 @@ import com.spring_peerfit_project.peerfit.model.Event;
 import com.spring_peerfit_project.peerfit.model.Person;;
 import com.spring_peerfit_project.peerfit.model.Registration;
 import com.spring_peerfit_project.peerfit.repository.PersonRepository;
+import com.spring_peerfit_project.peerfit.repository.RegistrationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class PersonService {
 
     @Autowired
     private PersonEventRelationService personEventRelationService;
+
+    @Autowired
+    private RegistrationRepository registrationRepository;
 
     //create a person, assume that we already have a person object when we call it from controller, already transformed from dto ?? ?
     @Transactional
@@ -47,12 +51,8 @@ public class PersonService {
                 person.getLastName() == null || person.getLastName().isEmpty()) {
 
             error += "parameters invalid";
-        } else if(person.getPassword().length()<8) { //password check
-            error += "password length than 8";
-        } else if(!containsDigit(person.getPassword())) {
-            error += "password doesnt contain digit";
-        } else if(!containsLetter(person.getPassword())) {
-            error += "password doesnt contain letter";
+        } else if(!isValidPassword(person.getPassword())) {
+            error += "invalid password";
         } else if(!isValidEmail(person.getEmail())) { //email check
             error += "email not valid";
         }
@@ -67,6 +67,10 @@ public class PersonService {
         Matcher m = emailPattern.matcher(email);
 
         return m.matches();
+    }
+
+    private static boolean isValidPassword(String pass) {
+        return pass.length() >= 8 && containsDigit(pass) && containsLetter(pass);
     }
 
     private static boolean containsDigit(String pass) {
@@ -113,15 +117,20 @@ public class PersonService {
     }
 
     @Transactional
-    public List<Person> getPersonsFromEvent(Event event) {
-
-        if(event == null) {
-            throw new IllegalArgumentException("event cant be null");
-        }
-
-        //event passed from eventRequestDto should have an id (maybe from path variable ?)
-        return personEventRelationService.getPersonsFromEvent(event);
+    public List<Registration> getAllRegistrations(int personId) {
+        return registrationRepository.findRegistrationsByPerson_Id(personId);
     }
+
+//    @Transactional
+//    public List<Person> getPersonsFromEvent(Event event) {
+//
+//        if(event == null) {
+//            throw new IllegalArgumentException("event cant be null");
+//        }
+//
+//        //event passed from eventRequestDto should have an id (maybe from path variable ?)
+//        return personEventRelationService.getPersonsFromEvent(event);
+//    }
 
     @Transactional
     public Person rate(Person person, float rating) {
@@ -130,13 +139,13 @@ public class PersonService {
         }
 
         //TODO maybe unnecessary, remove later
-        if(person == null) {
-            throw new IllegalArgumentException("invalid person input");
-        }
-        person = personRepo.findPersonById(person.getId());
-        if(person == null) {
-            throw new IllegalArgumentException("person doesn't exist");
-        }
+//        if(person == null) {
+//            throw new IllegalArgumentException("invalid person input");
+//        }
+//        person = personRepo.findPersonById(person.getId());
+//        if(person == null) {
+//            throw new IllegalArgumentException("person doesn't exist");
+//        }
 
         int n = person.getNumberOfRatings();
         float average = person.getAverageRating();
@@ -151,8 +160,20 @@ public class PersonService {
     }
 
     @Transactional
-    public Person changePassword(Person person, String oldPassword) {
-        return null;
+    public Person changePassword(Person person, String oldPassword, String newPassword) {
+        String oldPass = person.getPassword();
+        if(!oldPass.equals(oldPassword)) {
+            throw new IllegalArgumentException("wrong old password");
+        }
+        if(!isValidPassword(newPassword)) {
+            throw new IllegalArgumentException("invalid new Password");
+        }
+
+        person = personRepo.findPersonById(person.getId());
+        person.setPassword(newPassword);
+        person = personRepo.save(person);
+
+        return person;
     }
 
     @Transactional

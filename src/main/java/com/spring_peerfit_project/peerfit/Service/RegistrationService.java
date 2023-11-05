@@ -3,6 +3,7 @@ package com.spring_peerfit_project.peerfit.Service;
 import com.spring_peerfit_project.peerfit.model.Event;
 import com.spring_peerfit_project.peerfit.model.Person;
 import com.spring_peerfit_project.peerfit.model.Registration;
+import com.spring_peerfit_project.peerfit.model.Status;
 import com.spring_peerfit_project.peerfit.repository.RegistrationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,16 @@ public class RegistrationService {
     private RegistrationRepository regRepo;
 
     @Transactional
-    public void createRegistration(Registration registration, boolean isOrganizer) {
+    public void createRegistration(Registration registration, boolean isOrganizer, Status status, boolean paymentByCard) {
         //event and person are already verified, in controller use getPerson by id and getEvent by id
         Event event = registration.getEvent();
         Person person = registration.getPerson();
 
-        registration = new Registration(person, isOrganizer, event);
+        if(isPersonInEvent(person, event)) {
+            throw new IllegalArgumentException("person already in event");
+        }
+
+        registration = new Registration(person, isOrganizer, paymentByCard, status, event);
         regRepo.save(registration);
     }
 
@@ -47,6 +52,12 @@ public class RegistrationService {
 
         registration.setOrganizer(true);
         regRepo.save(registration);
+    }
+
+    @Transactional
+    public Registration changeStatus(Registration reg, Status status) {
+        reg.setStatus(status);
+        return reg;
     }
 
     @Transactional
@@ -77,5 +88,13 @@ public class RegistrationService {
         }
 
         return regList;
+    }
+
+    public Registration getRegistrationById(int regId) {
+        Registration registration = regRepo.findRegistrationById(regId);
+        if(registration == null) {
+            throw new IllegalArgumentException("registration doesn't exist");
+        }
+        return registration;
     }
 }

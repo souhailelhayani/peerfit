@@ -3,6 +3,7 @@ package com.spring_peerfit_project.peerfit.Service;
 import com.spring_peerfit_project.peerfit.model.Event;
 import com.spring_peerfit_project.peerfit.model.Person;
 import com.spring_peerfit_project.peerfit.model.Registration;
+import com.spring_peerfit_project.peerfit.model.Status;
 import com.spring_peerfit_project.peerfit.repository.EventRepository;
 import com.spring_peerfit_project.peerfit.repository.PersonRepository;
 import com.spring_peerfit_project.peerfit.repository.RegistrationRepository;
@@ -29,17 +30,33 @@ public class PersonEventRelationService {
         List<Registration> list = this.getRegistrationsByPerson(person);
         List<Event> eventsAttendedByPerson = new ArrayList<>();
         for (Registration r : list) {
-            eventsAttendedByPerson.add(r.getEvent());
+            if(r.getStatus() == Status.Accepted) {
+                eventsAttendedByPerson.add(r.getEvent());
+            }
         }
         return eventsAttendedByPerson;
     }
 
     @Transactional
-    public List<Person> getPersonsFromEvent(Event event) {
+    public List<Person> getAcceptedPersonsFromEvent(Event event) {
         List<Registration> list = this.getRegistrationsByEvent(event);
         List<Person> personList = new ArrayList<>();
         for(Registration registration: list) {
-            personList.add(registration.getPerson());
+            if(registration.getStatus() == Status.Accepted){
+                personList.add(registration.getPerson());
+            }
+        }
+        return personList;
+    }
+
+    @Transactional
+    public List<Person> getPendingPersonsFromEvent(Event event) {
+        List<Registration> list = this.getRegistrationsByEvent(event);
+        List<Person> personList = new ArrayList<>();
+        for(Registration registration: list) {
+            if(registration.getStatus() == Status.Invited || registration.getStatus() == Status.Requested){
+                personList.add(registration.getPerson());
+            }
         }
         return personList;
     }

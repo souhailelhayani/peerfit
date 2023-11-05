@@ -106,7 +106,7 @@ public class Event {
 //        return true;
 //    }
 
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
