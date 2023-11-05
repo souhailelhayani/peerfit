@@ -37,4 +37,84 @@ public class EventRequestDto {
     public Event toModel() {
         return new Event(startDate, startTime, duration, address, numOfPlayers, Level.valueOf(level), Atmosphere.valueOf(atm), Sport.valueOf(sport), price, paymentByCard);
     }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getNumOfPlayers() {
+        return numOfPlayers;
+    }
+
+    public void setNumOfPlayers(int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getAtm() {
+        return atm;
+    }
+
+    public void setAtm(String atm) {
+        this.atm = atm;
+    }
+
+    public String getSport() {
+        return sport;
+    }
+
+    public void setSport(String sport) {
+        this.sport = sport;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public boolean isPaymentByCard() {
+        return paymentByCard;
+    }
+
+    public void setPaymentByCard(boolean paymentByCard) {
+        this.paymentByCard = paymentByCard;
+    }
 }

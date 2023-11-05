@@ -28,7 +28,7 @@ public class PersonService {
     //create a person, assume that we already have a person object when we call it from controller, already transformed from dto ?? ?
     @Transactional
     public Person createPerson(Person person) {
-        if(isValidEmail(person.getEmail())) {
+        if(!isValidEmail(person.getEmail())) {
             throw new IllegalArgumentException("bad email format");
         }
 

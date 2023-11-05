@@ -48,7 +48,7 @@ public class EventController {
         return new ResponseEntity<>(new EventResponseDto(eventService.getEventById(id)), HttpStatus.OK);
     }
 
-    @GetMapping("/event/filerBySport")
+    @GetMapping("/event/filterBySport")
     public ResponseEntity<List<EventResponseDto>> getEventBySport(@RequestParam String sport) {
         List<Event> list = eventService.getEventsBySport(Sport.valueOf(sport));
         List<EventResponseDto> dtos = new ArrayList<>();
@@ -58,7 +58,7 @@ public class EventController {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @GetMapping("/event/filerByAtm")
+    @GetMapping("/event/filterByAtm")
     public ResponseEntity<List<EventResponseDto>> getEventByAtm(@RequestParam String atm) {
         List<Event> list = eventService.getEventsByAtm(Atmosphere.valueOf(atm));
         List<EventResponseDto> dtos = new ArrayList<>();
@@ -68,7 +68,7 @@ public class EventController {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @GetMapping("/event/filerByLevel")
+    @GetMapping("/event/filterByLevel")
     public ResponseEntity<List<EventResponseDto>> getEventByLevel(@RequestParam String level) {
         List<Event> list = eventService.getEventsByLevel(Level.valueOf(level));
         List<EventResponseDto> dtos = new ArrayList<>();
@@ -78,7 +78,7 @@ public class EventController {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @GetMapping("/event/filerByPrice")
+    @GetMapping("/event/filterByPrice")
     public ResponseEntity<List<EventResponseDto>> getEventByPriceLessThan(@RequestParam float price) {
         List<Event> list = eventService.getEventsByPriceLessThan(price);
         List<EventResponseDto> dtos = new ArrayList<>();
@@ -155,6 +155,11 @@ public class EventController {
     @PutMapping("/event/{id}/registrations/{reg_id}/reject")
     public void rejectRequest(@PathVariable("id") int id, @PathVariable("reg_id") int reg_id) {
         registrationService.changeStatus(registrationService.getRegistrationById(reg_id), Status.Rejected);
+    }
+
+    @PutMapping("/event/{id}/registrations/{reg_id}/accept")
+    public void acceptRequest(@PathVariable("id") int id, @PathVariable("reg_id") int reg_id) {
+        registrationService.changeStatus(registrationService.getRegistrationById(reg_id), Status.Accepted);
     }
 
     //TODO when adding login and authenticate, only delete event if organizer is TRUE for person logged in

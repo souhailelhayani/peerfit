@@ -91,7 +91,7 @@ public class EventService {
         List<Registration> list = registrationRepository.findRegistrationsByEvent_Id(id);
         List<Registration> out = new ArrayList<>();
         for(Registration registration: list) {
-            if(registration.getStatus() == Status.Requested) {
+            if(registration.getStatus() == Status.Requested || registration.getStatus() == Status.Invited) {
                 out.add(registration);
             }
         }

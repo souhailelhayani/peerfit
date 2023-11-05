@@ -29,6 +29,7 @@ public class Person {
         this.email = email;
         this.password = password;
         this.averageRating = 0.0f;
+        this.numberOfRatings = 0;
     }
 
     public Person(String firstName, String lastName, String email, String password, float averageRating, int numberOfRatings) {

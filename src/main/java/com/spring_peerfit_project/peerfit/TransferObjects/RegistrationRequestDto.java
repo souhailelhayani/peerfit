@@ -20,4 +20,28 @@ public class RegistrationRequestDto {
     public Registration toModel(Person person, boolean organizer, boolean payment, Status status, Event event) {
         return new Registration(person, organizer, payment, status, event);
     }
+
+    public int getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(int personId) {
+        this.personId = personId;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public boolean isPaymentByCard() {
+        return paymentByCard;
+    }
+
+    public void setPaymentByCard(boolean paymentByCard) {
+        this.paymentByCard = paymentByCard;
+    }
 }
