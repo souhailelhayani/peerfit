@@ -9,8 +9,6 @@ public class GroupChat {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String groupName;
-    @OneToOne(mappedBy = "group", cascade = CascadeType.ALL)
-    private Event event;
 
     protected GroupChat() {
 
@@ -35,11 +33,11 @@ public class GroupChat {
         this.groupName = groupName;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
+//    public Event getEvent() {
+//        return event;
+//    }
+//
+//    public void setEvent(Event event) {
+//        this.event = event;
+//    }
 }

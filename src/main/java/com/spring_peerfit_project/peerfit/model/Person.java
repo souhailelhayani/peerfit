@@ -2,7 +2,7 @@ package com.spring_peerfit_project.peerfit.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class Person {
@@ -11,23 +11,38 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String firstName;
-    private String LastName;
+    private String lastName;
     private String email;
     private String password;
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-    private List<Registration> registrations;
+    private float averageRating; //default should be 0
+    private int numberOfRatings;
+
+//    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+//    private List<Registration> registrations;
 
     protected Person () {
-
     }
 
     public Person(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
-        LastName = lastName;
-        //TODO add constraint cant have same email as someone else??
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.averageRating = 0.0f;
     }
+
+    public Person(String firstName, String lastName, String email, String password, float averageRating, int numberOfRatings) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.averageRating = averageRating;
+        this.numberOfRatings = numberOfRatings;
+    }
+
+    //    public Person(String email) {
+//        this.email = email;
+//    }
 
     public int getId() {
         return id;
@@ -38,7 +53,7 @@ public class Person {
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public String getEmail() {
@@ -49,9 +64,9 @@ public class Person {
         return password;
     }
 
-    public List<Registration> getRegistrations() {
-        return registrations;
-    }
+//    public List<Registration> getRegistrations() {
+//        return registrations;
+//    }
 
     public void setId(int person_id) {
         this.id = person_id;
@@ -62,7 +77,7 @@ public class Person {
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public void setEmail(String email) {
@@ -77,4 +92,19 @@ public class Person {
         return true;
     }
 
+    public void setAverageRating(float averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public float getAverageRating() {
+        return averageRating;
+    }
+
+    public int getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(int numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
+    }
 }

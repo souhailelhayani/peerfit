@@ -10,13 +10,13 @@ public class Registration {
     @Column(name = "registration_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id")
+    @ManyToOne
     private Person person;
     @Column(columnDefinition = "boolean default false")
-    private boolean isOrganizer = false;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "event_id")
+    private boolean isOrganizer;
+    private boolean paymentByCard;
+    private Status status;
+    @ManyToOne
     private Event event;
 
     protected Registration() {
@@ -32,6 +32,14 @@ public class Registration {
     public Registration(Person person, boolean isOrganizer, Event event) {
         this.person =person;
         this.isOrganizer = isOrganizer; //true
+        this.event = event;
+    }
+
+    public Registration(Person person, boolean isOrganizer, boolean paymentByCard, Status status, Event event) {
+        this.person = person;
+        this.isOrganizer = isOrganizer;
+        this.paymentByCard = paymentByCard;
+        this.status = status;
         this.event = event;
     }
 
@@ -65,6 +73,22 @@ public class Registration {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public boolean isPaymentByCard() {
+        return paymentByCard;
+    }
+
+    public void setPaymentByCard(boolean paymentByCard) {
+        this.paymentByCard = paymentByCard;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     /*@Override
